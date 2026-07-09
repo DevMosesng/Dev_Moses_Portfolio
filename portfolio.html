@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DevMoses is a frontend developer building responsive, accessible, and polished web interfaces.">
+    <title>DevMoses | Frontend Developer</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#07111f',
+                        panel: '#0c1728',
+                        line: '#1e314d'
+                    },
+                    boxShadow: {
+                        glow: '0 24px 80px rgba(34, 211, 238, 0.16)',
+                        lift: '0 18px 60px rgba(2, 6, 23, 0.35)'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background:
+                linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+                #07111f;
+            background-size: 42px 42px;
+        }
+
+        .ambient-sweep {
+            background: linear-gradient(110deg, transparent 0%, rgba(34, 211, 238, 0.11) 38%, rgba(245, 158, 11, 0.08) 52%, transparent 74%);
+            animation: sweep 12s ease-in-out infinite alternate;
+        }
+
+        .text-shine {
+            background-size: 240% auto;
+            animation: shine 7s linear infinite;
+        }
+
+        .float-slow {
+            animation: float 5.5s ease-in-out infinite;
+        }
+
+        .pulse-line {
+            animation: pulseLine 2.4s ease-in-out infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.75s ease, transform 0.75s ease;
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+        }
+
+        .tilt-card:hover {
+            border-color: rgba(34, 211, 238, 0.45);
+            box-shadow: 0 22px 70px rgba(8, 47, 73, 0.34);
+        }
+
+        .marquee-track {
+            animation: marquee 24s linear infinite;
+        }
+
+        .project-screen {
+            background:
+                linear-gradient(135deg, rgba(20, 184, 166, 0.24), transparent 30%),
+                linear-gradient(225deg, rgba(245, 158, 11, 0.18), transparent 32%),
+                #111c2e;
+        }
+
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes sweep {
+            from { transform: translateX(-18%); }
+            to { transform: translateX(18%); }
+        }
+
+        @keyframes shine {
+            to { background-position: 240% center; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-14px); }
+        }
+
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.42; transform: scaleX(0.74); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+
+<body class="bg-ink text-white font-sans antialiased selection:bg-cyan-400 selection:text-ink">
+    <header class="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-ink/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between">
+            <a href="#" class="text-xl font-black tracking-tight text-white" aria-label="DevMoses home">
+                Dev<span class="text-cyan-300">Moses</span><span class="text-amber-300">.</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300" aria-label="Primary navigation">
+                <a href="#about" class="hover:text-cyan-200 transition-colors">About</a>
+                <a href="#skills" class="hover:text-cyan-200 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-cyan-200 transition-colors">Projects</a>
+                <a href="#process" class="hover:text-cyan-200 transition-colors">Process</a>
+                <a href="#contact" class="hover:text-cyan-200 transition-colors">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <a href="#contact" class="hidden sm:inline-flex items-center gap-2 rounded-md border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-100 transition hover:bg-cyan-300/20">
+                    <i data-lucide="send" class="h-4 w-4"></i>
+                    Let's Chat
+                </a>
+                <button id="menuButton" class="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white" type="button" aria-label="Open navigation" aria-expanded="false">
+                    <i data-lucide="menu" class="h-5 w-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-ink/96 px-5 py-4 text-sm font-semibold text-slate-200" aria-label="Mobile navigation">
+            <div class="grid gap-3">
+                <a href="#about" class="rounded-md px-3 py-2 hover:bg-white/5">About</a>
+                <a href="#skills" class="rounded-md px-3 py-2 hover:bg-white/5">Skills</a>
+                <a href="#projects" class="rounded-md px-3 py-2 hover:bg-white/5">Projects</a>
+                <a href="#process" class="rounded-md px-3 py-2 hover:bg-white/5">Process</a>
+                <a href="#contact" class="rounded-md px-3 py-2 hover:bg-white/5">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="relative min-h-[92vh] overflow-hidden pt-32 sm:pt-36">
+            <div class="ambient-sweep pointer-events-none absolute inset-y-0 left-[-25%] w-[150%] opacity-90"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 pb-16">
+                <div class="grid min-h-[70vh] grid-cols-1 items-center gap-12 lg:grid-cols-[1.04fr_0.96fr]">
+                    <div class="reveal">
+                        <span class="inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">
+                            <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
+                            Available for frontend roles
+                        </span>
+
+                        <h1 class="mt-6 max-w-4xl text-4xl font-black leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
+                            I build interfaces that feel
+                            <span class="text-shine bg-gradient-to-r from-cyan-200 via-white to-amber-200 bg-clip-text text-transparent">fast, clear, and memorable.</span>
+                        </h1>
+
+                        <p class="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+                            I'm DevMoses, a frontend developer focused on responsive layouts, accessible interactions, and product screens that look sharp on every device.
+                        </p>
+
+                        <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                            <a href="#projects" class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-300 px-6 py-3.5 text-sm font-black text-ink shadow-glow transition hover:-translate-y-0.5 hover:bg-cyan-200">
+                                <i data-lucide="sparkles" class="h-4 w-4"></i>
+                                View My Work
+                            </a>
+                            <a href="mailto:odegbenromoses25@gmail.com" class="inline-flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/5 px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+                                <i data-lucide="mail" class="h-4 w-4"></i>
+                                Hire Me
+                            </a>
+                        </div>
+
+                        <div class="mt-10 grid max-w-xl grid-cols-3 gap-3 text-center">
+                            <div class="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+                                <p class="text-2xl font-black text-white">12+</p>
+                                <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400">Projects</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+                                <p class="text-2xl font-black text-white">98%</p>
+                                <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400">Responsive</p>
+                            </div>
+                            <div class="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+                                <p class="text-2xl font-black text-white">A11y</p>
+                                <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400">Mindset</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reveal float-slow mx-auto w-full max-w-xl" style="transition-delay: 120ms;">
+                        <div class="tilt-card rounded-2xl border border-white/10 bg-panel/90 p-4 shadow-lift">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                                <div class="flex gap-2">
+                                    <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+                                    <span class="h-3 w-3 rounded-full bg-amber-300"></span>
+                                    <span class="h-3 w-3 rounded-full bg-emerald-300"></span>
+                                </div>
+                                <span class="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-100">live-preview</span>
+                            </div>
+
+                            <div class="grid gap-4 pt-5">
+                                <div class="rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-5">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-sm font-bold text-cyan-100">Product Landing Page</p>
+                                            <p class="mt-1 text-xs text-slate-400">Conversion-focused responsive UI</p>
+                                        </div>
+                                        <i data-lucide="rocket" class="h-8 w-8 text-cyan-200"></i>
+                                    </div>
+                                    <div class="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
+                                        <div class="pulse-line h-full origin-left rounded-full bg-cyan-300"></div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                                        <i data-lucide="layout-dashboard" class="h-5 w-5 text-amber-200"></i>
+                                        <p class="mt-4 text-2xl font-black">0.7s</p>
+                                        <p class="mt-1 text-xs text-slate-400">interaction polish</p>
+                                    </div>
+                                    <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                                        <i data-lucide="shield-check" class="h-5 w-5 text-emerald-200"></i>
+                                        <p class="mt-4 text-2xl font-black">WCAG</p>
+                                        <p class="mt-1 text-xs text-slate-400">accessible patterns</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                                    <div class="space-y-2">
+                                        <div class="h-2 w-11/12 rounded bg-white/20"></div>
+                                        <div class="h-2 w-8/12 rounded bg-white/10"></div>
+                                        <div class="h-2 w-10/12 rounded bg-white/10"></div>
+                                    </div>
+                                    <div class="grid h-14 w-14 place-items-center rounded-lg bg-amber-300 text-ink">
+                                        <i data-lucide="code-2" class="h-7 w-7"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="border-y border-white/10 bg-white/[0.025] py-20">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+                <div class="reveal">
+                    <p class="text-sm font-black uppercase tracking-[0.22em] text-amber-200">About Me</p>
+                    <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Clean code, confident layouts, and small details that make users trust the page.</h2>
+                </div>
+                <div class="reveal space-y-5 text-slate-300">
+                    <p class="leading-8">
+                        I bridge design and implementation by turning ideas into smooth, responsive web experiences. I care about readable structure, practical component choices, and interaction states that guide people naturally.
+                    </p>
+                    <p class="leading-8">
+                        My strongest work sits at the front of the product: landing pages, dashboards, portfolio sites, and interface flows that need to load fast, look premium, and remain easy to maintain.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="overflow-hidden py-20">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                    <div>
+                        <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">Core Toolkit</p>
+                        <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Tools I use to ship polished interfaces.</h2>
+                    </div>
+                    <p class="max-w-md text-sm leading-7 text-slate-400">Frontend foundations supported by animation, accessibility, version control, and practical UI thinking.</p>
+                </div>
+
+                <div class="reveal mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+                    <article class="tilt-card rounded-xl border border-white/10 bg-white/[0.04] p-5">
+                        <i data-lucide="wind" class="h-7 w-7 text-cyan-200"></i>
+                        <h3 class="mt-5 font-black">Tailwind CSS</h3>
+                        <p class="mt-2 text-sm text-slate-400">Fast, consistent styling systems.</p>
+                    </article>
+                    <article class="tilt-card rounded-xl border border-white/10 bg-white/[0.04] p-5">
+                        <i data-lucide="braces" class="h-7 w-7 text-amber-200"></i>
+                        <h3 class="mt-5 font-black">JavaScript</h3>
+                        <p class="mt-2 text-sm text-slate-400">Interactive, useful behavior.</p>
+                    </article>
+                    <article class="tilt-card rounded-xl border border-white/10 bg-white/[0.04] p-5">
+                        <i data-lucide="blocks" class="h-7 w-7 text-emerald-200"></i>
+                        <h3 class="mt-5 font-black">HTML & CSS</h3>
+                        <p class="mt-2 text-sm text-slate-400">Semantic, flexible layouts.</p>
+                    </article>
+                    <article class="tilt-card rounded-xl border border-white/10 bg-white/[0.04] p-5">
+                        <i data-lucide="git-branch" class="h-7 w-7 text-rose-200"></i>
+                        <h3 class="mt-5 font-black">Git & GitHub</h3>
+                        <p class="mt-2 text-sm text-slate-400">Clean collaboration workflows.</p>
+                    </article>
+                </div>
+
+                <div class="reveal mt-12 overflow-hidden border-y border-white/10 py-4">
+                    <div class="marquee-track flex w-max gap-4 text-sm font-black uppercase tracking-[0.18em] text-slate-300">
+                        <span>Responsive Design</span><span class="text-cyan-300">/</span>
+                        <span>Micro-interactions</span><span class="text-amber-300">/</span>
+                        <span>Accessibility</span><span class="text-emerald-300">/</span>
+                        <span>Landing Pages</span><span class="text-rose-300">/</span>
+                        <span>Dashboards</span><span class="text-cyan-300">/</span>
+                        <span>Responsive Design</span><span class="text-amber-300">/</span>
+                        <span>Micro-interactions</span><span class="text-emerald-300">/</span>
+                        <span>Accessibility</span><span class="text-rose-300">/</span>
+                        <span>Landing Pages</span><span class="text-cyan-300">/</span>
+                        <span>Dashboards</span><span class="text-amber-300">/</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="border-y border-white/10 bg-white/[0.025] py-20">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal max-w-2xl">
+                    <p class="text-sm font-black uppercase tracking-[0.22em] text-emerald-200">Featured Work</p>
+                    <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Selected builds with the kind of polish employers notice.</h2>
+                </div>
+
+                <div class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <article class="reveal tilt-card overflow-hidden rounded-2xl border border-white/10 bg-panel">
+                        <div class="project-screen p-5">
+                            <a href="https://devmosesng.github.io/Squad-8894-semantic-portfolio/" target="_blank" rel="noreferrer noopener" class="group block overflow-hidden rounded-3xl border border-white/10 bg-ink/70 shadow-lift focus:outline-none focus:ring-2 focus:ring-cyan-300">
+                                <img src="https://s.wordpress.com/mshots/v1/https://devmosesng.github.io/Squad-8894-semantic-portfolio/?w=960" alt="Screenshot of Semantic Portfolio project" class="h-64 w-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy">
+                            </a>
+                        </div>
+                        <div class="p-6 sm:p-8">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 class="text-xl font-black">Semantic Portfolio Showcase</h3>
+                                    <p class="mt-3 text-sm leading-7 text-slate-400">A responsive portfolio example built with semantic HTML and polished interface details.</p>
+                                </div>
+                                <i data-lucide="shopping-bag" class="h-6 w-6 shrink-0 text-cyan-200"></i>
+                            </div>
+                            <div class="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-300">
+                                <span class="rounded-full bg-white/10 px-3 py-1">Responsive</span>
+                                <span class="rounded-full bg-white/10 px-3 py-1">Portfolio</span>
+                                <span class="rounded-full bg-white/10 px-3 py-1">Tailwind</span>
+                            </div>
+                            <div class="mt-6">
+                                <a href="https://devmosesng.github.io/Squad-8894-semantic-portfolio/" target="_blank" rel="noreferrer noopener" class="inline-flex items-center justify-center rounded-full bg-cyan-300 px-4 py-2 text-sm font-bold text-ink transition hover:bg-cyan-200">
+                                    View live project
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="reveal tilt-card overflow-hidden rounded-2xl border border-white/10 bg-panel" style="transition-delay: 120ms;">
+                        <div class="project-screen p-5">
+                            <a href="https://nextgen-virid-six.vercel.app/" target="_blank" rel="noreferrer noopener" class="group block overflow-hidden rounded-3xl border border-white/10 bg-ink/70 shadow-lift focus:outline-none focus:ring-2 focus:ring-emerald-300">
+                                <img src="https://s.wordpress.com/mshots/v1/https://nextgen-virid-six.vercel.app/?w=960" alt="Screenshot of NextGen Virid live website" class="h-64 w-full object-cover transition duration-300 group-hover:scale-[1.02]" loading="lazy">
+                            </a>
+                        </div>
+                        <div class="p-6 sm:p-8">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 class="text-xl font-black">NextGen Virid Live Site</h3>
+                                    <p class="mt-3 text-sm leading-7 text-slate-400">A polished web landing experience hosted on Vercel with a modern product presentation.</p>
+                                </div>
+                                <i data-lucide="chart-no-axes-combined" class="h-6 w-6 shrink-0 text-emerald-200"></i>
+                            </div>
+                            <div class="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-300">
+                                <span class="rounded-full bg-white/10 px-3 py-1">Landing Page</span>
+                                <span class="rounded-full bg-white/10 px-3 py-1">Vercel</span>
+                                <span class="rounded-full bg-white/10 px-3 py-1">Live UI</span>
+                            </div>
+                            <div class="mt-6">
+                                <a href="https://nextgen-virid-six.vercel.app/" target="_blank" rel="noreferrer noopener" class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-4 py-2 text-sm font-bold text-ink transition hover:bg-emerald-200">
+                                    View live project
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="py-20">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6">
+                <div class="reveal max-w-2xl">
+                    <p class="text-sm font-black uppercase tracking-[0.22em] text-rose-200">Process</p>
+                    <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">How I turn a rough idea into a finished screen.</h2>
+                </div>
+
+                <div class="mt-10 grid gap-4 md:grid-cols-3">
+                    <article class="reveal rounded-xl border border-white/10 bg-white/[0.04] p-6">
+                        <span class="text-sm font-black text-cyan-200">01</span>
+                        <h3 class="mt-4 text-lg font-black">Structure</h3>
+                        <p class="mt-3 text-sm leading-7 text-slate-400">Clarify the page goal, content hierarchy, layout behavior, and responsive needs before styling.</p>
+                    </article>
+                    <article class="reveal rounded-xl border border-white/10 bg-white/[0.04] p-6" style="transition-delay: 100ms;">
+                        <span class="text-sm font-black text-amber-200">02</span>
+                        <h3 class="mt-4 text-lg font-black">Build</h3>
+                        <p class="mt-3 text-sm leading-7 text-slate-400">Create semantic sections, reusable patterns, hover states, animation timing, and accessible controls.</p>
+                    </article>
+                    <article class="reveal rounded-xl border border-white/10 bg-white/[0.04] p-6" style="transition-delay: 200ms;">
+                        <span class="text-sm font-black text-emerald-200">03</span>
+                        <h3 class="mt-4 text-lg font-black">Refine</h3>
+                        <p class="mt-3 text-sm leading-7 text-slate-400">Polish spacing, loading feel, mobile behavior, performance, and the small details that build trust.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="border-t border-white/10 bg-white/[0.025] py-20">
+            <div class="max-w-4xl mx-auto px-5 text-center sm:px-6">
+                <div class="reveal">
+                    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">Contact</p>
+                    <h2 class="mt-3 text-3xl font-black tracking-tight sm:text-5xl">Have a role, site, or interface that needs sharper execution?</h2>
+                    <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-300">
+                        Send a message and I will respond with availability, next steps, and how I can help move the work forward.
+                    </p>
+                    <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                        <a href="mailto:odegbenromoses25@gmail.com" class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-300 px-6 py-3.5 text-sm font-black text-ink shadow-glow transition hover:-translate-y-0.5 hover:bg-cyan-200">
+                            <i data-lucide="mail" class="h-4 w-4"></i>
+                            odegbenromoses25@gmail.com
+                        </a>
+                        <a href="#projects" class="inline-flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/5 px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+                            <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                            See Projects
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-8 text-center text-sm text-slate-500">
+        <p>&copy; 2026 DevMoses. Built with clean UI, motion, and accessibility in mind.</p>
+    </footer>
+
+    <script>
+        const menuButton = document.querySelector('#menuButton');
+        const mobileMenu = document.querySelector('#mobileMenu');
+
+        menuButton?.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden');
+            menuButton.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        mobileMenu?.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.16 });
+
+        reveals.forEach((item) => revealObserver.observe(item));
+
+        document.querySelectorAll('.tilt-card').forEach((card) => {
+            card.addEventListener('mousemove', (event) => {
+                const bounds = card.getBoundingClientRect();
+                const x = event.clientX - bounds.left;
+                const y = event.clientY - bounds.top;
+                const rotateY = ((x / bounds.width) - 0.5) * 6;
+                const rotateX = ((0.5 - (y / bounds.height)) * 6);
+                card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+
+
+
